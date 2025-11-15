@@ -189,5 +189,5 @@ def build_and_concat_years(year_start: int, year_end: int,
 # ------------------------------ CLI ------------------------------
 if __name__ == "__main__":
     BASE = "data/data"
-    out_all = build_and_concat_years(2000, 2024, BASE)
+    out_all = build_and_concat_years(2000, 2025, BASE)
     print(f"Wrote: {out_all}")
