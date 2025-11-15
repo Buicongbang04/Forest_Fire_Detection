@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os, json, time
 from pathlib import Path
 from datetime import datetime
@@ -55,43 +54,11 @@ class LSTMHead(nn.Module):
         self.lstm = nn.LSTM(feat_dim, hidden, num_layers=num_layers, batch_first=True)
         self.head = nn.Sequential(nn.LayerNorm(hidden), nn.ReLU(), nn.Dropout(dropout), nn.Linear(hidden, 2))
     def forward(self,x):
-        # nếu input 2D (B,F) -> thêm time-step = 1: (B,1,F)
         if x.dim() == 2:
             x = x.unsqueeze(1)
-        h,_ = self.lstm(x)              # (B,T,H)
-        return self.head(h[:,-1,:])     # (B,2)
+        h,_ = self.lstm(x)         
+        return self.head(h[:,-1,:])    
 
-# class TCNBlock(nn.Module):
-#     def __init__(self, in_c, out_c, k=3, d=1):
-#         super().__init__()
-#         pad=(k-1)*d
-#         self.net=nn.Sequential(
-#             nn.Conv1d(in_c,out_c,k,padding=pad,dilation=d),
-#             nn.ReLU(),
-#             nn.Conv1d(out_c,out_c,k,padding=pad,dilation=d),
-#             nn.ReLU()
-#         )
-#         self.proj=nn.Conv1d(in_c,out_c,1) if in_c!=out_c else nn.Identity()
-#     def forward(self,x):
-#         y=self.net(x)
-#         return y + self.proj(x)
-
-# class TCNHead(nn.Module):
-#     def __init__(self, feat_dim, hidden=128):
-#         super().__init__()
-#         self.block1=TCNBlock(feat_dim,hidden,d=1)
-#         self.block2=TCNBlock(hidden,hidden,d=2)
-#         self.pool=nn.AdaptiveAvgPool1d(1)
-#         self.fc=nn.Linear(hidden,2)
-#     def forward(self,x):
-#         # nếu input 2D (B,F) -> (B,1,F) rồi chuyển thành (B,F,T)
-#         if x.dim() == 2:
-#             x = x.unsqueeze(1)
-#         x = x.transpose(1,2)            # (B,F,T)
-#         x = self.block1(x)
-#         x = self.block2(x)
-#         x = self.pool(x).squeeze(-1)    # (B,H)
-#         return self.fc(x)               # (B,2)
 
 def build_scaler(name): return StandardScaler() if name=="standard" else MinMaxScaler()
 
