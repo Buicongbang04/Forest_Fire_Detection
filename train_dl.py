@@ -165,7 +165,6 @@ def run_one(cfg,model_name,scaler_name):
 
     if model_name=="lstm":
         model=LSTMHead(len(FEATURES)).to(device)
-    # elif model_name=="tcn":
     else:
         model=MLP(len(FEATURES),cfg["hidden"],cfg["dropout"]).to(device)
 

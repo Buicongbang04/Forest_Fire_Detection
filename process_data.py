@@ -121,7 +121,7 @@ def build_clean_one_year(year: int,
     modis["lat_grid"] = round_to_grid(modis["lat"], grid_step)
     modis["lon_grid"] = round_to_grid(modis["lon"], grid_step)
 
-    # 4Tính dữ liệu thời tiết
+    # tính dữ liệu thời tiết
     era5["Temperature"] = era5["t2m"] - 273.15
     era5[" RH"] = rh_from_t_tdew_celsius(era5["t2m"] - 273.15, era5["d2m"] - 273.15)
     era5[" Ws"] = np.sqrt(era5["u10"]**2 + era5["v10"]**2) * 3.6
